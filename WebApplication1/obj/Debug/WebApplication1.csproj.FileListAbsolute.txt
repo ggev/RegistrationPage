@@ -1,0 +1,9 @@
+C:\Users\Gevorg\Documents\Visual Studio 2017\Projects\WebApplication1\WebApplication1\bin\WebApplication1.dll.config
+C:\Users\Gevorg\Documents\Visual Studio 2017\Projects\WebApplication1\WebApplication1\bin\WebApplication1.dll
+C:\Users\Gevorg\Documents\Visual Studio 2017\Projects\WebApplication1\WebApplication1\bin\WebApplication1.pdb
+C:\Users\Gevorg\Documents\Visual Studio 2017\Projects\WebApplication1\WebApplication1\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\Gevorg\Documents\Visual Studio 2017\Projects\WebApplication1\WebApplication1\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\Gevorg\Documents\Visual Studio 2017\Projects\WebApplication1\WebApplication1\obj\Debug\WebApplication1.csproj.CoreCompileInputs.cache
+C:\Users\Gevorg\Documents\Visual Studio 2017\Projects\WebApplication1\WebApplication1\obj\Debug\WebApplication1.dll
+C:\Users\Gevorg\Documents\Visual Studio 2017\Projects\WebApplication1\WebApplication1\obj\Debug\WebApplication1.pdb
+C:\Users\Gevorg\Documents\Visual Studio 2017\Projects\WebApplication1\WebApplication1\obj\Debug\WebApplication1.csprojResolveAssemblyReference.cache
