@@ -13,48 +13,125 @@ namespace WebApplication1
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Page.IsPostBack)
+            SetVisibleFalse();
+            registration_form.Visible = true;
+            ChangeContent();
+            CheckEmailExist();
+        }
+
+
+        protected void ButtonSubmit_Click(object sender, EventArgs e)
+        {
+            UserRegistration();
+        }
+
+        protected void ButtonSignIn_Click(object sender, EventArgs e)
+        {
+            Login();
+        }
+
+        protected void Login()
+        {
+            SqlConnection sqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["UsersConnectionString"].ConnectionString);
+            sqlConnection.Open();
+
+            string sqlQuery = "select count(*) from Users where Email='" + TextBoxEmailLog.Text + "'";
+            SqlCommand sqlCommand = new SqlCommand(sqlQuery, sqlConnection);
+
+            int temp = (int)sqlCommand.ExecuteScalar();
+            sqlConnection.Close();
+
+            if (temp == 1)
             {
-                SqlConnection sqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["UsersConnectionString"].ConnectionString);
                 sqlConnection.Open();
+                string checkPasswordQuery = "select Password from Users where Email='" + TextBoxEmailLog.Text + "'";
+                sqlCommand = new SqlCommand(checkPasswordQuery, sqlConnection);
 
-                string sqlQuery = "select count(*) from Users where Email=" + "'" + TBEmail.Text + "'";
-                SqlCommand sqlCommand = new SqlCommand(sqlQuery, sqlConnection);
-
-                int temp = (int)sqlCommand.ExecuteScalar();
-                if (temp == 1)
+                string password = sqlCommand.ExecuteScalar().ToString().Replace(" ", "");
+                if (password == TextBoxPassLog.Text)
                 {
-                    LabelErrorMassage.Visible = true;
+                    string checkUserName = "select Name from Users where Email='" + TextBoxEmailLog.Text + "'";
+                    sqlCommand = new SqlCommand(checkUserName, sqlConnection);
+
+                    string name = sqlCommand.ExecuteScalar().ToString();
+                    labelLoginMessage.Text = $"Hi {name}. You're login!";
+                    SetVisibleFalse();
+                    login_complete.Visible = true;
                 }
                 sqlConnection.Close();
             }
         }
 
-        protected void Button_Submit_Click(object sender, EventArgs e)
+        private void UserRegistration()
         {
             try
             {
                 SqlConnection sqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["UsersConnectionString"].ConnectionString);
                 sqlConnection.Open();
 
-                string sqlQuery = "insert into users (Name, Surname, Email, Birthday, Password) values(@Name, @Surname, @Email, @Birthday, @Password)";
+                string sqlQuery = "insert into users (Name, Surname, Email, Password) values(@Name, @Surname, @Email, @Password)";
 
                 SqlCommand sqlCommand = new SqlCommand(sqlQuery, sqlConnection);
-                sqlCommand.Parameters.AddWithValue("@Name", TBName.Text);
-                sqlCommand.Parameters.AddWithValue("@Surname", TBSurname.Text);
-                sqlCommand.Parameters.AddWithValue("@Email", TBEmail.Text);
-                sqlCommand.Parameters.AddWithValue("@Birthday", TBBirthday.Text);
-                sqlCommand.Parameters.AddWithValue("@Password", TBPass.Text);
+                sqlCommand.Parameters.AddWithValue("@Name", TextBoxName.Text);
+                sqlCommand.Parameters.AddWithValue("@Surname", TextBoxSurname.Text);
+                sqlCommand.Parameters.AddWithValue("@Email", TextBoxEmail.Text);
+                sqlCommand.Parameters.AddWithValue("@Password", TextBoxPassword.Text);
 
                 sqlCommand.ExecuteNonQuery();
 
                 sqlConnection.Close();
 
-                Response.Redirect("~/Manager.aspx");
+                registration_form.Visible = false;
+                success_registration.Visible = true;
             }
             catch (Exception ex)
             {
-               
+                Response.Write(ex.Message);
+            }
+        }
+
+        protected void ChangeContent()
+        {
+            switch (Request.QueryString["id"])
+            {
+                case "login":
+                    {
+                        registration_form.Visible = false;
+                        login_form.Visible = true;
+                    }
+                    break;
+                case "manager":
+                    {
+                        Response.Redirect("Manager.aspx");
+                    }
+                    break;
+            }
+        }
+
+        private void SetVisibleFalse()
+        {
+            login_form.Visible = false;
+            login_complete.Visible = false;
+            success_registration.Visible = false;
+            registration_form.Visible = false;
+        }
+
+        private void CheckEmailExist()
+        {
+            if (Page.IsPostBack)
+            {
+                SqlConnection sqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["UsersConnectionString"].ConnectionString);
+                sqlConnection.Open();
+
+                string sqlQuery = "select count(*) from Users where Email=" + "'" + TextBoxEmail.Text + "'";
+                SqlCommand sqlCommand = new SqlCommand(sqlQuery, sqlConnection);
+
+                int temp = (int)sqlCommand.ExecuteScalar();
+                if (temp == 1)
+                {
+                    LabelEmailExist.Visible = true;
+                }
+                sqlConnection.Close();
             }
         }
     }
