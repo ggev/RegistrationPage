@@ -39,11 +39,9 @@ namespace WebApplication1
             SqlCommand sqlCommand = new SqlCommand(sqlQuery, sqlConnection);
 
             int temp = (int)sqlCommand.ExecuteScalar();
-            sqlConnection.Close();
 
             if (temp == 1)
             {
-                sqlConnection.Open();
                 string checkPasswordQuery = "select Password from Users where Email='" + TextBoxEmailLog.Text + "'";
                 sqlCommand = new SqlCommand(checkPasswordQuery, sqlConnection);
 
@@ -56,10 +54,10 @@ namespace WebApplication1
                     string name = sqlCommand.ExecuteScalar().ToString();
                     labelLoginMessage.Text = $"Hi {name}. You're login!";
                     SetVisibleFalse();
-                    login_complete.Visible = true;
+                    login_complete.Visible = true; 
                 }
-                sqlConnection.Close();
             }
+            sqlConnection.Close();
         }
 
         private void UserRegistration()
